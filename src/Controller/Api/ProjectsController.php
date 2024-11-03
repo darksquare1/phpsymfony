@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
 
@@ -64,5 +65,20 @@ class ProjectsController extends AbstractController
             $errors_list = $form->getConfig()->getType()->getInnerType()->customGetErrors($form);
             return $this->json(['data' => $errors_list], 400);
         }
+    }
+
+    #[Route('api/delete/project/{id}', name: 'api_delete_project', methods: ['DELETE'], format: 'json')]
+    public function delete_project(string $id, ProjectRepository $projectRepository, EntityManagerInterface $em): JsonResponse
+    {
+        $uuid = Uuid::fromString($id);
+        $project = $projectRepository->find($uuid);
+        if ($project !== null) {
+            $em->remove($project);
+            $em->flush();
+            $response = new JsonResponse();
+            $response->setStatusCode(Response::HTTP_NO_CONTENT);
+            return $response;
+        }
+        return $this->json(['data' => ['id'=>'Not found']], 404);
     }
 }
