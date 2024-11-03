@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Project;
+use App\Entity\Task;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
@@ -17,7 +17,9 @@ class TaskFormType extends BaseFormType
                 new NotNull(),
                 new Length(['max' => 255, 'min' => 3]),
             ],
-            'description' => []
+            'description' => [
+                new NotNull(),
+            ]
 
         ];
 
@@ -27,7 +29,7 @@ class TaskFormType extends BaseFormType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Project::class,
+            'data_class' => Task::class,
             'csrf_protection' => false,
         ]);
     }
