@@ -38,6 +38,35 @@ class ProjectsController extends AbstractController
         $form = $this->CreateForm(ProjectFormType::class, $project);
         $form->submit($data);
         if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($project);
+            $em->flush();
+            return $this->json(['data' => $project]);
+        } else {
+            $errors_list = [];
+            foreach ($form->getErrors() as $error) {
+                $errors_list[$form->getName()][] = $error->getMessage();
+            }
+            foreach ($form as $child) {
+                if (!$child->isValid()) {
+                    foreach ($child->getErrors() as $error) {
+                        $errors_list[$child->getName()][] = $error->getMessage();
+                    }
+                }
+            }
+
+            return $this->json(['data' => $errors_list], 400);
+        }
+    }
+
+    #[Route('api/update/project/{id}', name: 'api_update_project', methods: ['PATCH'], format: 'json')]
+    public function update_project(string $id, Request $request, EntityManagerInterface $em, ProjectRepository $projectRepository): JsonResponse
+    {
+        $uuid = Uuid::fromString($id);
+        $project = $projectRepository->find($uuid);
+        $data = json_decode($request->getContent(), true);
+        $form = $this->CreateForm(ProjectFormType::class, $project);
+        $form->submit($data);
+        if ($form->isSubmitted() && $form->isValid()) {
             $project->updateTimestamps();
             $em->persist($project);
             $em->flush();
