@@ -42,18 +42,7 @@ class ProjectsController extends AbstractController
             $em->flush();
             return $this->json(['data' => $project]);
         } else {
-            $errors_list = [];
-            foreach ($form->getErrors() as $error) {
-                $errors_list[$form->getName()][] = $error->getMessage();
-            }
-            foreach ($form as $child) {
-                if (!$child->isValid()) {
-                    foreach ($child->getErrors() as $error) {
-                        $errors_list[$child->getName()][] = $error->getMessage();
-                    }
-                }
-            }
-
+            $errors_list = $form->getConfig()->getType()->getInnerType()->customGetErrors($form);
             return $this->json(['data' => $errors_list], 400);
         }
     }
@@ -72,18 +61,7 @@ class ProjectsController extends AbstractController
             $em->flush();
             return $this->json(['data' => $project]);
         } else {
-            $errors_list = [];
-            foreach ($form->getErrors() as $error) {
-                $errors_list[$form->getName()][] = $error->getMessage();
-            }
-            foreach ($form as $child) {
-                if (!$child->isValid()) {
-                    foreach ($child->getErrors() as $error) {
-                        $errors_list[$child->getName()][] = $error->getMessage();
-                    }
-                }
-            }
-
+            $errors_list = $form->getConfig()->getType()->getInnerType()->customGetErrors($form);
             return $this->json(['data' => $errors_list], 400);
         }
     }

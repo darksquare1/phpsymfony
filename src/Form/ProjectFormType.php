@@ -23,6 +23,23 @@ class ProjectFormType extends AbstractType
             ])
         ;
     }
+    public function customGetErrors($form): array
+    {
+        $errors_list = [];
+
+        foreach ($form->getErrors() as $error) {
+            $errors_list[$form->getName()][] = $error->getMessage();
+        }
+        foreach ($form as $child) {
+            if (!$child->isValid()) {
+                foreach ($child->getErrors() as $error) {
+                    $errors_list[$child->getName()][] = $error->getMessage();
+                }
+            }
+        }
+        return $errors_list;
+
+    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
