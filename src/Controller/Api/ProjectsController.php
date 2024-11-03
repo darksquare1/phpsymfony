@@ -20,6 +20,9 @@ class ProjectsController extends AbstractController
     public function get_projects(ProjectRepository $projectRepository): JsonResponse
     {
         $projects = $projectRepository->findAll();
+        if (!$projects) {
+            return $this->json(['data' => 'No projects found']);
+        }
         return $this->json(['data' => $projects]);
     }
 
@@ -28,6 +31,9 @@ class ProjectsController extends AbstractController
     {
         $uuid = Uuid::fromString($id);
         $project = $projectRepository->find($uuid);
+        if (!$project) {
+            return $this->json(['data' => ['id' => 'Not found']], 404);
+        }
         return $this->json(['data' => $project]);
     }
 
@@ -72,13 +78,13 @@ class ProjectsController extends AbstractController
     {
         $uuid = Uuid::fromString($id);
         $project = $projectRepository->find($uuid);
-        if ($project !== null) {
+        if (!$project) {
             $em->remove($project);
             $em->flush();
             $response = new JsonResponse();
             $response->setStatusCode(Response::HTTP_NO_CONTENT);
             return $response;
         }
-        return $this->json(['data' => ['id'=>'Not found']], 404);
+        return $this->json(['data' => ['id' => 'Not found']], 404);
     }
 }
