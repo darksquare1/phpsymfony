@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-#[Route('/api', name: 'api_projects_groups_general')]
 class ProjectsGroupController extends BaseApiController
 {
     #[Route('/project-groups', name: 'api_project_groups', methods: ['GET'], format: 'json')]

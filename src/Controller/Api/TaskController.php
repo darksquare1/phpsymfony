@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-#[Route('/api', name: 'api_tasks_general')]
 class TaskController extends BaseApiController
 {
     #[Route('/tasks', name: 'api_tasks', methods: ['GET'], format: 'json')]

@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-#[Route('/api', name: 'api_projects_general')]
 class ProjectsController extends BaseApiController
 {
     #[Route('/projects', name: 'api_projects', methods: ['GET'], format: 'json')]
