@@ -69,11 +69,6 @@ abstract class BaseApiController extends AbstractController
     protected function handleGetAll(ObjectRepository $repository): JsonResponse
     {
         $entities = $repository->findAll();
-
-        if (!$entities) {
-            return $this->json([]);
-        }
-
         return $this->json(['data' => $entities]);
     }
 }
