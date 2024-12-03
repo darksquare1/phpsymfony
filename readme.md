@@ -1,7 +1,13 @@
 ## Docker
 
-
-Make sure you are in the /docker directory
+Create .env.local file which looks like this:
+```
+DATABASE_USER=changeme
+DATABASE_PASSWORD=changeme
+DATABASE_DB=changeme
+DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres:5432/${DATABASE_DB}?serverVersion=16&charset=utf8"
+```
+Run the following commands:
 ```
 docker-compose build --no-cache
 docker compose up -d
