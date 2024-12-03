@@ -20,7 +20,6 @@ class TaskFormType extends BaseFormType
             'description' => [
                 new NotNull(),
             ]
-
         ];
 
         $this->addFieldsWithConstraints($builder, $fieldsWithConstraints);

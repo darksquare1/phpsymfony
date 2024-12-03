@@ -17,7 +17,6 @@ class ProjectFormType extends BaseFormType
                 new NotNull(),
                 new Length(['max' => 255, 'min' => 3]),
             ]
-
         ];
 
         $this->addFieldsWithConstraints($builder, $fieldsWithConstraints);
