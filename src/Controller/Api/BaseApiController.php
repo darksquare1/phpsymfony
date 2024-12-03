@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +11,7 @@ use Symfony\Component\Uid\Uuid;
 
 abstract class BaseApiController extends AbstractController
 {
-    protected function handleAdd(Request $request, EntityManagerInterface $em, $formType, $entity): JsonResponse
+    protected function handleAdd(Request $request, EntityManagerInterface $em, string $formType, object $entity): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         $form = $this->createForm($formType, $entity);
@@ -26,7 +27,7 @@ abstract class BaseApiController extends AbstractController
         }
     }
 
-    protected function handleUpdate(string $id, Request $request, EntityManagerInterface $em, $formType, $repository): JsonResponse
+    protected function handleUpdate(string $id, Request $request, EntityManagerInterface $em, string $formType, ObjectRepository $repository): JsonResponse
     {
         $uuid = Uuid::fromString($id);
         $entity = $repository->find($uuid);
@@ -39,7 +40,7 @@ abstract class BaseApiController extends AbstractController
         return $this->handleAdd($request, $em, $formType, $entity);
     }
 
-    protected function handleDelete(string $id, EntityManagerInterface $em, $repository): JsonResponse
+    protected function handleDelete(string $id, EntityManagerInterface $em, ObjectRepository $repository): JsonResponse
     {
         $uuid = Uuid::fromString($id);
         $entity = $repository->find($uuid);
@@ -53,7 +54,7 @@ abstract class BaseApiController extends AbstractController
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 
-    protected function handleGet(string $id, $repository): JsonResponse
+    protected function handleGet(string $id, ObjectRepository $repository): JsonResponse
     {
         $uuid = Uuid::fromString($id);
         $entity = $repository->find($uuid);
@@ -65,12 +66,12 @@ abstract class BaseApiController extends AbstractController
         return $this->json(['data' => $entity]);
     }
 
-    protected function handleGetAll($repository): JsonResponse
+    protected function handleGetAll(ObjectRepository $repository): JsonResponse
     {
         $entities = $repository->findAll();
 
         if (!$entities) {
-            return $this->json(['data' => 'No entities found']);
+            return $this->json([]);
         }
 
         return $this->json(['data' => $entities]);
