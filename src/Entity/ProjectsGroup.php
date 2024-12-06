@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProjectsGroupRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
@@ -23,11 +25,15 @@ class ProjectsGroup
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'projectsGroup')]
+    private Collection $projects;
+
     public function __construct()
     {
         $this->id = Uuid::v4();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -59,6 +65,36 @@ class ProjectsGroup
     public function updateTimestamps(): self
     {
         $this->updatedAt = new \DateTime();
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): static
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+            $project->setProjectsGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): static
+    {
+        if ($this->projects->removeElement($project)) {
+            // set the owning side to null (unless already changed)
+            if ($project->getProjectsGroup() === $this) {
+                $project->setProjectsGroup(null);
+            }
+        }
+
         return $this;
     }
 

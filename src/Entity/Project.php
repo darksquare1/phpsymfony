@@ -26,8 +26,12 @@ class Project
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'tasks', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'tasks', orphanRemoval: true)]
     private Collection $tasks;
+
+    #[ORM\ManyToOne(targetEntity: ProjectsGroup::class, inversedBy: 'projects')]
+    #[ORM\JoinColumn(name: 'project_group_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    private ?ProjectsGroup $projectsGroup = null;
 
 
     public function __construct()
@@ -96,6 +100,18 @@ class Project
                 $task->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProjectsGroup(): ?ProjectsGroup
+    {
+        return $this->projectsGroup;
+    }
+
+    public function setProjectsGroup(?ProjectsGroup $projectsGroup): static
+    {
+        $this->projectsGroup = $projectsGroup;
 
         return $this;
     }
