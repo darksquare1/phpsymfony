@@ -89,7 +89,6 @@ class ProjectsGroup
     public function removeProject(Project $project): static
     {
         if ($this->projects->removeElement($project)) {
-            // set the owning side to null (unless already changed)
             if ($project->getProjectsGroup() === $this) {
                 $project->setProjectsGroup(null);
             }

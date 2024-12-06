@@ -26,7 +26,7 @@ class Project
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'tasks', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project', orphanRemoval: true)]
     private Collection $tasks;
 
     #[ORM\ManyToOne(targetEntity: ProjectsGroup::class, inversedBy: 'projects')]
