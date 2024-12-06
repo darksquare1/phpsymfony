@@ -25,6 +25,11 @@ class Task
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'tasks')]
+    #[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id', nullable: false)]
+    private Project $project;
+
+
     public function __construct()
     {
         $this->id = Uuid::v4();
@@ -74,4 +79,17 @@ class Task
         $this->updatedAt = new \DateTime();
         return $this;
     }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): static
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
 }
