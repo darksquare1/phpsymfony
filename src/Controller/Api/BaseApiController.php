@@ -20,9 +20,11 @@ abstract class BaseApiController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($entity);
             $em->flush();
+
             return $this->json(['data' => $entity]);
         } else {
             $errors_list = $form->getConfig()->getType()->getInnerType()->customGetErrors($form);
+
             return $this->json(['data' => $errors_list], 400);
         }
     }
@@ -51,13 +53,14 @@ abstract class BaseApiController extends AbstractController
 
         $em->remove($entity);
         $em->flush();
+
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 
     protected function handleGet(string $id, ObjectRepository $repository): JsonResponse
     {
         $uuid = Uuid::fromString($id);
-        $entity = $repository->find($uuid);
+        $entity = $repository->findOneByIdWithRelations($uuid);
 
         if (!$entity) {
             return $this->json(['data' => ['id' => 'Not found']], 404);
@@ -68,7 +71,8 @@ abstract class BaseApiController extends AbstractController
 
     protected function handleGetAll(ObjectRepository $repository): JsonResponse
     {
-        $entities = $repository->findAll();
+        $entities = $repository->findAllWithRelations();
+
         return $this->json(['data' => $entities]);
     }
 }

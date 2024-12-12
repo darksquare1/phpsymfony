@@ -14,6 +14,8 @@ class TaskFixture extends Fixture
             $task = new Task();
             $task->setName('Task ' . $i);
             $task->setDescription('Task description ' . $i);
+            $project = $this->getReference(ProjectFixture::PROJECT_REFERENCE_PREFIX . $i);
+            $project->addTask($task);
             $manager->persist($task);
         }
 
