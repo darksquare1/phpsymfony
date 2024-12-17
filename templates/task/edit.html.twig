@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Редактирование задачи{% endblock %}
+
+{% block body %}
+    <h1>Редактирование задачи</h1>
+
+    {{ include('task/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_task_index') }}">Вернуться к списку задач</a>
+
+    {{ include('task/_delete_form.html.twig') }}
+{% endblock %}
