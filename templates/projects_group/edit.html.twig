@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Редактировать группу проектов{% endblock %}
+
+{% block body %}
+    <h1>Редактировать группу проектов</h1>
+
+    {{ include('projects_group/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_projects_group_index') }}">Вернуться к списку групп</a>
+
+    {{ include('projects_group/_delete_form.html.twig') }}
+{% endblock %}
