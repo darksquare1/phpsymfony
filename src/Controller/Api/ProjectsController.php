@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Form\ProjectFormType;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Factory\ProjectFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,15 +15,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProjectsController extends BaseApiController
 {
     #[Route('/projects', name: 'api_projects', methods: ['GET'], format: 'json')]
-    public function getProjects(ProjectRepository $projectRepository): JsonResponse
+    public function getProjects(ProjectRepository $projectRepository, ProjectFactory $projectDTOFactory): JsonResponse
     {
-        return $this->handleGetAll($projectRepository);
+        return $this->handleGetAll($projectRepository, $projectDTOFactory);
     }
 
     #[Route('/projects/{id}', name: 'api_project', methods: ['GET'], format: 'json')]
-    public function getProject(string $id, ProjectRepository $projectRepository): JsonResponse
+    public function getProject(string $id, ProjectRepository $projectRepository, ProjectFactory $projectDTOFactory): JsonResponse
     {
-        return $this->handleGet($id, $projectRepository);
+        return $this->handleGet($id, $projectRepository, $projectDTOFactory);
     }
 
     #[Route('/add/project', name: 'api_add_project', methods: ['POST'], format: 'json')]

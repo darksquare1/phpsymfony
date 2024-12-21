@@ -20,9 +20,11 @@ abstract class BaseApiController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($entity);
             $em->flush();
+
             return $this->json(['data' => $entity]);
         } else {
             $errors_list = $form->getConfig()->getType()->getInnerType()->customGetErrors($form);
+
             return $this->json(['data' => $errors_list], 400);
         }
     }
@@ -51,10 +53,11 @@ abstract class BaseApiController extends AbstractController
 
         $em->remove($entity);
         $em->flush();
+
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 
-    protected function handleGet(string $id, ObjectRepository $repository): JsonResponse
+    protected function handleGet(string $id, ObjectRepository $repository, $dtoFactory): JsonResponse
     {
         $uuid = Uuid::fromString($id);
         $entity = $repository->find($uuid);
@@ -62,13 +65,16 @@ abstract class BaseApiController extends AbstractController
         if (!$entity) {
             return $this->json(['data' => ['id' => 'Not found']], 404);
         }
+        $dto = $dtoFactory->createFromEntity($entity);
 
-        return $this->json(['data' => $entity]);
+        return $this->json(['data' => $dto]);
     }
 
-    protected function handleGetAll(ObjectRepository $repository): JsonResponse
+    protected function handleGetAll(ObjectRepository $repository, $dtoFactory): JsonResponse
     {
         $entities = $repository->findAll();
-        return $this->json(['data' => $entities]);
+        $dtos = $dtoFactory->createFromEntities($entities);
+
+        return $this->json(['data' => $dtos]);
     }
 }
