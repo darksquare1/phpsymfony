@@ -3,12 +3,11 @@
 namespace App\DataFixtures;
 
 use App\Entity\ProjectsGroup;
-use App\Entity\Project;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-
-class ProjectGroupsFixture extends Fixture
+class ProjectGroupsFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -18,14 +17,15 @@ class ProjectGroupsFixture extends Fixture
             $manager->persist($projectGroup);
             $projects_amount = random_int(1, 4);
             for ($j = 0; $j < $projects_amount; $j++) {
-                $project = new Project();
-                $project->setName('Project ' . $j);
+                $project = $this->getReference(ProjectFixture::PROJECT_REFERENCE_PREFIX . rand(0, 9));
                 $projectGroup->addProject($project);
-                $manager->persist($project);
             }
         }
-
-
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [ProjectFixture::class];
     }
 }
