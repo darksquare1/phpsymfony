@@ -21,35 +21,4 @@ class TaskRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Task::class);
     }
-
-    public function findAllWithRelations(): array
-    {
-        $tasks = $this->findAll();
-        $data = [];
-        foreach ($tasks as $task) {
-            $data[] = [
-                'id' => $task->getId(),
-                'name' => $task->getName(),
-                'description' => $task->getDescription(),
-                'createdAt' => $task->getCreatedAt(),
-                'updatedAt' => $task->getUpdatedAt(),
-            ];
-        }
-
-        return $data;
-    }
-
-    public function findOneByIdWithRelations(Uuid $id): array
-    {
-        $task = $this->find($id);
-        $data[] = [
-            'id' => $task->getId(),
-            'name' => $task->getName(),
-            'description' => $task->getDescription(),
-            'createdAt' => $task->getCreatedAt(),
-            'updatedAt' => $task->getUpdatedAt(),
-        ];
-
-        return $data;
-    }
 }

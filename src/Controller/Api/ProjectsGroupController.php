@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\ProjectsGroup;
+use App\Factory\ProjectGroupFactory;
 use App\Form\ProjectsGroupFormType;
 use App\Repository\ProjectsGroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,15 +15,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProjectsGroupController extends BaseApiController
 {
     #[Route('/project-groups', name: 'api_project_groups', methods: ['GET'], format: 'json')]
-    public function getProjectGroups(ProjectsGroupRepository $projectGroupRepository): JsonResponse
+    public function getProjectGroups(ProjectsGroupRepository $projectGroupRepository, ProjectGroupFactory $pgFactory): JsonResponse
     {
-        return $this->handleGetAll($projectGroupRepository);
+        return $this->handleGetAll($projectGroupRepository, $pgFactory);
     }
 
     #[Route('/project-groups/{id}', name: 'api_project_group', methods: ['GET'], format: 'json')]
-    public function getProjectGroup(string $id, ProjectsGroupRepository $projectGroupRepository): JsonResponse
+    public function getProjectGroup(string $id, ProjectsGroupRepository $projectGroupRepository, ProjectGroupFactory $pgFactory): JsonResponse
     {
-        return $this->handleGet($id, $projectGroupRepository);
+        return $this->handleGet($id, $projectGroupRepository, $pgFactory);
     }
 
     #[Route('/add/project-group', name: 'api_add_project_group', methods: ['POST'], format: 'json')]
