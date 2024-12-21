@@ -14,17 +14,21 @@ class ProjectFactory
         $this->taskFactory = $taskFactory;
     }
 
-    public function createFromEntity(Project $project, bool $includeTasks = true): ProjectDTO
+    public function createFromEntity(Project $project, bool $includeRelatedData = true): ProjectDTO
     {
-        if ($includeTasks) {
-            $taskData = $this->taskFactory->createFromEntities($project->getTasks()->toArray());
-
+        if ($includeRelatedData) {
+            $taskData = $this->taskFactory->createFromEntities($project->getTasks()->toArray(), false);
+            $projectGroup = $project->getProjectsGroup();
+            $projectGroupName = $projectGroup?->getName();
+            $projectGroupId = $projectGroup?->getId();
             return new ProjectDTO(
                 $project->getId(),
                 $project->getName(),
                 $project->getCreatedAt(),
                 $project->getUpdatedAt(),
-                $taskData
+                $taskData,
+                $projectGroupId,
+                $projectGroupName
             );
         }
 
@@ -35,7 +39,6 @@ class ProjectFactory
             $project->getUpdatedAt()
         );
     }
-
 
     public function createFromEntities(array $projects, bool $includeTasks = true): array
     {
