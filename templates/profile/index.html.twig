@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Профиль</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <h2>Обновить имя пользователя</h2>
+    {{ form_start(profileForm) }}
+    {{ form_row(profileForm.username) }}
+    <button type="submit">Сохранить</button>
+    {{ form_end(profileForm) }}
+
+    <h2>Ваши задачи</h2>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.name }}: {{ task.description }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('app_logout') }}">Выйти</a>
+{% endblock %}

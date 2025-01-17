@@ -35,6 +35,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $tasks;
 
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function setTasks(Collection $tasks): static
+    {
+        $this->tasks = $tasks;
+
+        return $this;
+    }
+
     public function getUsername(): ?string
     {
         return $this->username;
