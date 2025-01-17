@@ -16,13 +16,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
-
+    #[ORM\Column(length: 255)]
+    private ?string $username = null;
     #[ORM\Column]
     private array $roles = [];
-
     #[ORM\Column]
     private ?string $password = null;
     #[ORM\Column(type: 'datetime')]
@@ -31,6 +30,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $updatedAt = null;
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $tasks;
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(?string $username): static
+    {
+        $this->username = $username;
+
+        return $this;
+    }
 
     public function getUpdatedAt(): ?\DateTimeInterface
     {
