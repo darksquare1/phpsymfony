@@ -30,7 +30,7 @@ class Task
     private Project $project;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: True, onDelete: 'CASCADE')]
     private User $user;
 
     public function __construct()
