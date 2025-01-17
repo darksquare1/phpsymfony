@@ -29,6 +29,9 @@ class Task
     #[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Project $project;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private User $user;
 
     public function __construct()
     {
@@ -50,6 +53,7 @@ class Task
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -61,6 +65,7 @@ class Task
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -77,6 +82,7 @@ class Task
     public function updateTimestamps(): self
     {
         $this->updatedAt = new \DateTime();
+
         return $this;
     }
 
