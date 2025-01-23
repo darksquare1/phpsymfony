@@ -10,3 +10,7 @@ api_controllers:
         namespace: App\Controller\Api
     type: attribute
     prefix: /api
+
+app_logout:
+    path: /logout
+    methods: GET
